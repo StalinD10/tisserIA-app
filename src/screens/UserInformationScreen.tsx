@@ -4,7 +4,6 @@ import React, { useContext } from 'react'
 import { Image, Text, TextInput, TouchableOpacity, View, useColorScheme } from 'react-native'
 import Header from '../components/Header';
 import { AuthContext } from '../context/AuthContext';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Button from '../components/Button';
 
 const StyledView = styled(View);
@@ -23,7 +22,7 @@ function UserInformationScreen() {
 
   return (
     <StyledView className='flex-1 bg-white dark:bg-black'>
-      <KeyboardAwareScrollView>
+     
         <Header screen='SettingsScreen' />
         <StyledView className='items-center m-8 justify-center'>
           <StyledImage source={user && user.image && user.image.image_url ? { uri: user.image.image_url } : require('../img/default-user.jpg')}
@@ -93,7 +92,6 @@ function UserInformationScreen() {
         <StyledView className='self-center mt-9'>
           <Button onPress={() => console.log('Actualizando')} title='Actualizar' width='w-40' textSize='text-lg' />
         </StyledView>
-      </KeyboardAwareScrollView>
 
     </StyledView>
   )
