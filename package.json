@@ -11,8 +11,6 @@
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
     "@react-native-async-storage/async-storage": "1.18.2",
-    "@react-native-community/cameraroll": "^4.1.2",
-    "@react-native-masked-view/masked-view": "0.2.9",
     "@react-navigation/bottom-tabs": "^6.5.12",
     "@react-navigation/drawer": "^6.6.7",
     "@react-navigation/material-top-tabs": "^6.6.5",

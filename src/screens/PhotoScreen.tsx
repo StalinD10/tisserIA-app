@@ -26,13 +26,15 @@ function PhotoScreen() {
     const cameraRef: any = useRef();
     const isFocused = useIsFocused();
     const { width, height } = useWindowDimensions();
-
+    const [hasPermission, setHasPermission]: any = useState(null);
     const { navigate }: any = useNavigation();
 
     useEffect(() => {
-        hasPermission();
-
-    }, [])
+        (async () => {
+            const { status } = await Camera.requestCameraPermissionsAsync();
+            setHasPermission(status === 'granted');
+        })();
+    }, []);
 
     useEffect(() => {
         if (isFocused) {
@@ -43,19 +45,7 @@ function PhotoScreen() {
 
     }, [isFocused])
 
-    const hasPermission = async () => {
-        const permission = Platform.Version >= "33"
-            ? PermissionsAndroid.PERMISSIONS.CAMERA
-            : PermissionsAndroid.PERMISSIONS.CAMERA
 
-        const hasPermission = await PermissionsAndroid.check(permission);
-        if (hasPermission) {
-            return true;
-        }
-
-        const status = await PermissionsAndroid.request(permission);
-        return status === "granted";
-    };
 
     const pickImages = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -89,7 +79,12 @@ function PhotoScreen() {
         setImages();
         setShowCamera(true);
     }
-
+    if (hasPermission === null) {
+        return <View />;
+    }
+    if (hasPermission === false) {
+        return <Text>No se ha concedido permiso para usar la cámara.</Text>;
+    }
     return (
         <StyledView className='flex-1 bg-white dark:bg-black'>
 
