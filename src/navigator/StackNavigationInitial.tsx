@@ -10,6 +10,11 @@ import BottomTabNavigation from './BottomTabNavigation';
 import SettingsScreen from '../screens/SettingsScreen';
 import UserInformationScreen from '../screens/UserInformationScreen';
 
+import GarmentScreen from '../screens/GarmentScreen';
+import Header from '../components/Header';
+import HeaderComponent from '../components/Header';
+import PhotoScreen from '../screens/PhotoScreen';
+
 const Stack = createStackNavigator();
 
 function StackNavigationInitial() {
@@ -43,7 +48,11 @@ function StackNavigationInitial() {
                         <>
                             <Stack.Screen name="BottomTabNavigation" component={BottomTabNavigation} />
                             <Stack.Screen name="Settings" component={SettingsScreen} />
+                            <Stack.Screen name="Photo" component={PhotoScreen} />
+                            <Stack.Screen name="GarmentScreen" component={GarmentScreen} />
                             <Stack.Screen name="UserInformationScreen" component={UserInformationScreen} />
+                         
+
                         </>
                     )
             }

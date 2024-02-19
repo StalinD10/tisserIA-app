@@ -67,6 +67,8 @@ function BottomTabNavigation() {
                 }}
             />
 
+            
+
         </Tab.Navigator>
     )
 }

@@ -13,6 +13,7 @@ export type AuthAction =
     | { type: 'removeError' }
     | { type: 'notAuthenticated' }
     | { type: 'logout' }
+    | { type: 'updateUser', payload: { user: User } };
 
 export const authReducer = (state: AuthState, action: AuthAction): AuthState => {
 
@@ -49,7 +50,11 @@ export const authReducer = (state: AuthState, action: AuthAction): AuthState => 
                 token: null,
                 user: null,
             };
-
+        case 'updateUser':
+            return {
+                ...state,
+                user: action.payload.user
+            }
         default:
             return state;
     }

@@ -13,6 +13,7 @@ type AuthContextProps = {
     singUp: (registerData: RegisterData) => void;
     singIn: (loginData: LoginData) => void;
     logOut: () => void;
+    updateUser: (userId: any, updatedData: any) => void;
     removeError: () => void;
 }
 
@@ -85,9 +86,9 @@ export const AuthProvider = ({ children }: any) => {
     const singIn = async ({ email, password }: LoginData) => {
         try {
             const resp = await loginAPI.post<LoginResponse>('/login', { email, password }
-            
+
             );
-            
+
             dispatch({
                 type: 'singUp',
                 payload: {
@@ -104,6 +105,28 @@ export const AuthProvider = ({ children }: any) => {
             })
         }
     };
+
+
+    const updateUser = async (userId: string, updatedData: User) => {
+
+        try {
+            const resp = await loginAPI.put(`/updateUser/${userId}`,  updatedData);
+            
+            dispatch({
+                type: 'updateUser',
+                payload: {
+                    user: resp.data.user
+                }
+            });
+        } catch (error: any) {
+            console.log(error);
+            dispatch({
+                type: "addError",
+                payload: error.response.data.message || 'No se actualizó los datos'
+            })
+        }
+    }
+
     const logOut = async () => {
         await AsyncStorage.removeItem('token');
         dispatch({ type: 'logout' });
@@ -123,6 +146,7 @@ export const AuthProvider = ({ children }: any) => {
             singUp,
             singIn,
             logOut,
+            updateUser,
             removeError
         }}>
             {children}

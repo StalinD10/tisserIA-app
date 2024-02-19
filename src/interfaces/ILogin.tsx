@@ -8,7 +8,8 @@ export interface User {
     id: string;
     username: string;
     email: string;
-    image: Image; // Cambié "imageUser" a "image"
+    password: string;
+    image: Image;
 }
 
 export interface Image {
@@ -25,3 +26,5 @@ export interface RegisterData {
     password: string;
     username: string;
 }
+
+

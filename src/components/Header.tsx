@@ -10,6 +10,7 @@ interface Props {
     screen: string;
     image?: boolean;
     userImage?: boolean;
+    onPress?: () => any;
 }
 
 const StyledView = styled(View);
@@ -19,7 +20,7 @@ const StyledImage = styled(Image);
 const StyledTouchable = styled(TouchableOpacity);
 
 
-function Header({ screen, image = false, userImage = false }: Props) {
+function Header({ screen, image = false, userImage = false, onPress }: Props) {
 
     const { navigate }: any = useNavigation();
     const { user } = useContext(AuthContext);
@@ -39,7 +40,7 @@ function Header({ screen, image = false, userImage = false }: Props) {
             </StyledView>
             {image &&
                 <>
-                    <StyledTouchable>
+                    <StyledTouchable onPress={() => navigate('GarmentScreen')}>
                         <StyledText className='font-bold text-xl text-red-400 dark:text-sky-600'>Subir</StyledText>
                     </StyledTouchable>
                 </>
