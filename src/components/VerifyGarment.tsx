@@ -6,10 +6,14 @@ const StyledView = styled(View);
 const StyledImage = styled(Image);
 const StyledTouchable = styled(TouchableOpacity);
 
-function VerifyGarment() {
+interface Props {
+    imageUrl: String;
+}
+
+function VerifyGarment({ imageUrl }: Props) {
     return (
         <StyledView>
-
+                                
         </StyledView>
     )
 }

@@ -15,7 +15,19 @@ import Header from '../components/Header';
 import HeaderComponent from '../components/Header';
 import PhotoScreen from '../screens/PhotoScreen';
 
-const Stack = createStackNavigator();
+export type RootStackParams = {
+    InitialScreen: undefined,
+    LoginScreen: undefined,
+    RegisterScreen: undefined,
+    BottomTabNavigation: undefined,
+    SettingsScreen: undefined,
+    PhotoScreen: undefined,
+    UserInformationScreen: undefined,
+    GarmentScreen: { image: string },
+}
+
+
+const Stack = createStackNavigator<RootStackParams>();
 
 function StackNavigationInitial() {
 
@@ -47,11 +59,11 @@ function StackNavigationInitial() {
                     ) : (
                         <>
                             <Stack.Screen name="BottomTabNavigation" component={BottomTabNavigation} />
-                            <Stack.Screen name="Settings" component={SettingsScreen} />
-                            <Stack.Screen name="Photo" component={PhotoScreen} />
+                            <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+                            <Stack.Screen name="PhotoScreen" component={PhotoScreen} />
                             <Stack.Screen name="GarmentScreen" component={GarmentScreen} />
                             <Stack.Screen name="UserInformationScreen" component={UserInformationScreen} />
-                         
+
 
                         </>
                     )

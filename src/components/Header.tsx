@@ -8,8 +8,9 @@ import { AuthContext } from '../context/AuthContext';
 
 interface Props {
     screen: string;
-    image?: boolean;
+    image?: string;
     userImage?: boolean;
+    photoUser?: string;
     onPress?: () => any;
 }
 
@@ -20,7 +21,7 @@ const StyledImage = styled(Image);
 const StyledTouchable = styled(TouchableOpacity);
 
 
-function Header({ screen, image = false, userImage = false, onPress }: Props) {
+function Header({ screen, image = "", userImage = false, onPress}: Props) {
 
     const { navigate }: any = useNavigation();
     const { user } = useContext(AuthContext);
@@ -38,9 +39,14 @@ function Header({ screen, image = false, userImage = false, onPress }: Props) {
 
                 </StyledView>
             </StyledView>
-            {image &&
+            {image !== "" &&
                 <>
-                    <StyledTouchable onPress={() => navigate('GarmentScreen')}>
+                    <StyledTouchable
+                        onPress={() => navigate('GarmentScreen',
+                            {
+                                image
+                            }
+                        )}>
                         <StyledText className='font-bold text-xl text-red-400 dark:text-sky-600'>Subir</StyledText>
                     </StyledTouchable>
                 </>

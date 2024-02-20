@@ -106,7 +106,6 @@ export const AuthProvider = ({ children }: any) => {
         }
     };
 
-
     const updateUser = async (userId: string, updatedData: User) => {
 
         try {

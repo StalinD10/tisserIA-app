@@ -80,6 +80,7 @@ const CameraComponent: ForwardRefRenderFunction<Camera, Props> = ({ isPhotoUser 
     if (cameraRef.current) {
       try {
         const photo = await cameraRef.current.takePictureAsync();
+        
         setImages(photo.uri)
       } catch (error) {
         console.error('Failed to take picture: ', error);
