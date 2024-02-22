@@ -6,7 +6,6 @@ import { StyleSheet, useColorScheme } from 'react-native';
 
 const Tab = createMaterialTopTabNavigator();
 
-
 function TopTabNavigationInitital() {
 
     const colorScheme = useColorScheme();

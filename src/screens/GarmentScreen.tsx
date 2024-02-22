@@ -25,6 +25,7 @@ function GarmentScreen({ route, navigation }: Props) {
     const [isloading, setIsLoading] = useState(false);
     const [progress, setProgress] = useState(0);
     const [isCrochet, setIsCrochet]: any = useState();
+    const [message, setMessage]: any = useState();
     const [showAlert, setShowAlert] = useState(false);
 
 
@@ -42,7 +43,8 @@ function GarmentScreen({ route, navigation }: Props) {
                     'Content-Type': 'multipart/form-data'
                 },
             })
-            setIsCrochet(resp.data.is_crochet)
+            setIsCrochet(resp.data.is_crochet);
+            setMessage(resp.data.message);
 
         } catch (error) {
             console.log(error);
@@ -52,58 +54,63 @@ function GarmentScreen({ route, navigation }: Props) {
             setShowAlert(true);
         }
     }
-
     const newPhoto = () => {
         navigation.navigate('PhotoScreen');
         setIsCrochet();
         setShowAlert(false);
     }
+    
     return (
 
-        <StyledView className='flex-1 items-center'>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <StyledView className='flex-1 items-center'>
 
-            <Header screen='PhotoScreen' userImage={true} />
+                <Header screen='PhotoScreen' userImage={true} onPress={newPhoto} />
 
-            <StyledText className='color-red-400 dark:color-gray-200 text-xl font-bold mt-4'>Análisis de patrón</StyledText>
+                <StyledText className='color-red-400 dark:color-gray-200 text-xl font-bold mt-4'>Análisis de patrón</StyledText>
 
-            <StyledImage source={{ uri: garmentImage }} className='w-4/6 h-1/3 rounded-3xl mt-8 ' />
+                <StyledImage source={{ uri: garmentImage }} className='w-4/6 h-1/3 rounded-3xl mt-8 ' />
 
-            <StyledText className='color-gray-500 text-base font-normal mt-4'>Imagen Subida</StyledText>
-            {!isCrochet && showAlert &&
-                <StyledView className='border border-red-500 rounded-lg mt-8 bg-red-200 dark:bg-red-900'>
-                    <StyledText className='text-red-900 p-3 dark:text-gray-300'>No es una prenda de crochet</StyledText>
-                </StyledView>
-            }
-            {isCrochet && showAlert &&
-                <>
-                    <StyledView className='border border-green-500 rounded-lg mt-8 bg-green-200 dark:bg-green-900'>
-                        <StyledText className='text-green-900 p-3 dark:text-gray-300'>Es una prenda de crochet</StyledText>
+                <StyledText className='color-gray-500 text-base font-normal mt-4'>Imagen Subida</StyledText>
+
+                {!isCrochet && showAlert &&
+                    <StyledView className='border border-red-500 rounded-lg mt-8 bg-red-200 dark:bg-red-900'>
+                        <StyledText className='text-red-900 p-3 dark:text-gray-300'>No es una prenda de crochet</StyledText>
                     </StyledView>
-                    <StyledTouchable
-                        className="bg-red-400 dark:bg-sky-700 mt-8 rounded-xl"
-                        onPress={newPhoto}>
-                        <StyledText className='text-white p-3 font-semibold text-base'>Nueva Foto </StyledText>
-                    </StyledTouchable>
-                </>
-            }
-            {isloading ?
-                <ProgressBar progress={progress} indeterminate={true} color={colorScheme === 'light' ? '#DFA6A6' : '#075985'}
-                    style={{ width: 300, height: 30, borderRadius: 10, marginTop: 25 }} />
-                : !isCrochet ? (
-                    <StyledTouchable
-                        className="bg-red-400 dark:bg-sky-700 mt-8 rounded-xl"
-                        onPress={isCrochet === undefined ? handleVerify : newPhoto}
-                    >
-                        <StyledText className='text-white p-3 font-semibold text-base'>
-                            {isCrochet === undefined ? "Analizar" : "Nueva Foto"}
-                        </StyledText>
-                    </StyledTouchable>
-                ) : null}
+                }
+                {isCrochet && showAlert &&
+                    <>
+                        <StyledView className='border border-green-500 rounded-lg mt-8 bg-green-200 dark:bg-green-900'>
+                            <StyledText className='text-green-900 p-3 dark:text-gray-300'>{message}</StyledText>
+                        </StyledView>
+                        <StyledTouchable
+                            className="bg-red-400 dark:bg-sky-700 mt-8 rounded-xl"
+                            onPress={newPhoto}>
+                            <StyledText className='text-white p-3 font-semibold text-base'>Nueva Foto </StyledText>
+                        </StyledTouchable>
+                    </>
+                }
 
-            <Recomendactions />
+                {isloading ?
+                    <ProgressBar progress={progress} indeterminate={true} color={colorScheme === 'light' ? '#DFA6A6' : '#075985'}
+                        style={{ width: 300, height: 30, borderRadius: 10, marginTop: 25 }} />
+                    : !isCrochet ? (
+                        <StyledTouchable
+                            className="bg-red-400 dark:bg-sky-700 mt-8 rounded-xl"
+                            onPress={isCrochet === undefined ? handleVerify : newPhoto}
+                        >
+                            <StyledText className='text-white p-3 font-semibold text-base'>
+                                {isCrochet === undefined ? "Analizar" : "Nueva Foto"}
+                            </StyledText>
+                        </StyledTouchable>
+                    ) : null}
 
+                {!isCrochet &&
 
-        </ StyledView >
+                    <Recomendactions />}
+
+            </ StyledView >
+        </ScrollView>
 
     )
 }

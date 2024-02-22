@@ -1,4 +1,4 @@
-import { AntDesign, Fontisto } from '@expo/vector-icons';
+import { AntDesign, Feather, Fontisto } from '@expo/vector-icons';
 import { styled } from 'nativewind'
 import React, { useContext, useEffect, useState } from 'react'
 import { Alert, Keyboard, KeyboardAvoidingView, Text, TextInput, View, useColorScheme } from 'react-native';
@@ -16,6 +16,7 @@ const StyledText = styled(Text);
 const StyledView = styled(View);
 const StyledTextInput = styled(TextInput);
 const StyledIcon = styled(Fontisto);
+const StyledIconEye = styled(Feather);
 const StyledIconLock = styled(AntDesign);
 const StyledTouchable = styled(TouchableOpacity);
 
@@ -24,7 +25,8 @@ const StyledTouchable = styled(TouchableOpacity);
 function Login() {
 
     const { singIn, errorMessage, removeError } = useContext(AuthContext);
-    const [notificationVisible, setNotificationVisible] = useState(false);
+    
+  const [passwordVisible, setPasswordVisible] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
 
     const { email, password, onChange } = useForm({
@@ -84,28 +86,24 @@ function Login() {
                      rounded-lg bg-white focus:ring-red-400
                       focus:border-red-300 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400'
                     placeholderTextColor={(colorScheme === 'dark' ? '#E5E7EB' : '#4B5563')}
-                    secureTextEntry
+                    secureTextEntry={passwordVisible}
                     placeholder='Contraseña'
                     onSubmitEditing={onLogin}
                     onChangeText={(value) => onChange(value, 'password')}
                     value={password}
 
                 />
+                 <StyledTouchable onPress={() => setPasswordVisible(!passwordVisible)}>
+            <StyledIconEye name={passwordVisible ? 'eye' : 'eye-off'} size={27} className='color-red-200 dark:color-gray-400 ' />
+          </StyledTouchable>
             </StyledView>
 
             {isLoading ? (
                 <LoadingScreen isLoading={true} />
             ) :
                 <>
-                    <StyledView className='items-center mb-2'>
-                        <StyledTouchable className='flex-row items-center my-5 rounded-lg border-2 p-1 border-gray-300 dark:border-sky-900'>
-                            <GoogleIcon
-                                width={30}
-                                height={30}
-                            />
-                            <StyledText className='text-gray-600 dark:text-gray-300'>Ingresa con Google</StyledText>
-
-                        </StyledTouchable>
+                    <StyledView className='items-center mb-2 mt-9'>
+                       
 
 
                         <Button

@@ -28,7 +28,7 @@ function UserInformationScreen() {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [passwordVisible, setPasswordVisible] = useState(true);
   const [imageUser, setImageUser]: any = useState();
   const cameraRef: any = useRef();
 
@@ -43,11 +43,12 @@ function UserInformationScreen() {
   }, [errorMessage]);
 
 
-  const { email, password, username,  onChange } = useForm({
+  const { email, password, repeatPassword, username, onChange } = useForm({
     email: user?.email,
     password: user?.password,
+    repeatPassword: user?.password,
     username: user?.username,
-   
+
   });
 
   const dataUpdateUser = {
@@ -63,15 +64,24 @@ function UserInformationScreen() {
   const userId = user?.id;
 
   const onUpdateUser = async () => {
-    Keyboard.dismiss();
-    setIsLoading(true);
-    try {
-      await updateUser(userId, dataUpdateUser);
+    if (password === repeatPassword) {
+      Keyboard.dismiss();
+      setIsLoading(true);
+      try {
+        await updateUser(userId, dataUpdateUser);
+      }
+      finally {
+        setIsLoading(false);
+        navigate("HomeScreen")
+      }
+
+    } else {
+      Alert.alert('Ocurrió un error', 'Las contraseñas no son iguales', [
+        
+        { text: 'OK' },
+      ]);
     }
-    finally {
-      setIsLoading(false);
-      navigate("HomeScreen")
-    }
+
   }
 
   const pickImages = async () => {
@@ -88,7 +98,6 @@ function UserInformationScreen() {
       setModalVisible(!modalVisible)
     }
   }
-
 
   const takePhoto = async () => {
     if (cameraRef.current) {
@@ -192,10 +201,42 @@ function UserInformationScreen() {
             value={password}
             onChangeText={(value) => onChange(value, 'password')}
             placeholderTextColor={(colorScheme === 'dark' ? '#E5E7EB' : '#4B5563')}
-            secureTextEntry
+            secureTextEntry={passwordVisible}
             contextMenuHidden={true}
+
           />
+          <StyledTouchable onPress={() => setPasswordVisible(!passwordVisible)}>
+            <StyleIcon name={passwordVisible ? 'eye' : 'eye-off'} size={27} className='color-red-200 dark:color-gray-400 ' />
+          </StyledTouchable>
+
         </StyledView>
+
+        <StyledView className='self-start mx-11 mt-4'>
+          <StyledText className='text-gray-600 dark:text-gray-300 font-semibold text-lg'>Repetir Contraseña</StyledText>
+        </StyledView>
+
+        <StyledView className='flex-row items-center  border-b-2 border-red-200 dark:border-sky-900'>
+          <StyledIconLock name="lock" size={24} className='color-gray-400' />
+          <StyledTextInput
+            className='w-3/4 h-12 m-3 p-3 text-2sm 
+                     text-gray-500  border-gray-200
+                     rounded-lg bg-white 
+                      focus:border-red-300 dark:bg-gray-800 dark:border-gray-600
+                      dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500'
+            inputMode='text'
+            value={repeatPassword}
+            onChangeText={(value) => onChange(value, 'repeatPassword')}
+            placeholderTextColor={(colorScheme === 'dark' ? '#E5E7EB' : '#4B5563')}
+            secureTextEntry={passwordVisible}
+            contextMenuHidden={true}
+
+          />
+          <StyledTouchable onPress={() => setPasswordVisible(!passwordVisible)}>
+            <StyleIcon name={passwordVisible ? 'eye' : 'eye-off'} size={27} className='color-red-200 dark:color-gray-400 ' />
+          </StyledTouchable>
+
+        </StyledView>
+
         {isLoading ? (
           <LoadingScreen isLoading={true} />
         ) :
