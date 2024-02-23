@@ -7,8 +7,10 @@ import Header from '../components/Header';
 import garmentAPI from '../api/garmentAPI';
 import { ProgressBar, MD3Colors } from 'react-native-paper';
 import LoadingScreen from './LoadingScreen';
-import { Entypo, FontAwesome } from '@expo/vector-icons';
+import { Entypo, FontAwesome, Foundation } from '@expo/vector-icons';
 import Recomendactions from '../components/Recomendactions';
+import ModalComponent from '../components/Modal';
+import { User } from '../interfaces/ILogin';
 
 interface Props extends StackScreenProps<RootStackParams, "GarmentScreen"> { }
 
@@ -16,6 +18,7 @@ const StyledView = styled(View);
 const StyledImage = styled(Image);
 const StyledText = styled(Text);
 const StyledTouchable = styled(TouchableOpacity);
+const StyledIcon = styled(Foundation);
 
 function GarmentScreen({ route, navigation }: Props) {
 
@@ -27,7 +30,7 @@ function GarmentScreen({ route, navigation }: Props) {
     const [isCrochet, setIsCrochet]: any = useState();
     const [message, setMessage]: any = useState();
     const [showAlert, setShowAlert] = useState(false);
-
+    const [modalVisible, setModalVisible] = useState(false);
 
     const handleVerify = async () => {
         setIsLoading(true);
@@ -59,7 +62,7 @@ function GarmentScreen({ route, navigation }: Props) {
         setIsCrochet();
         setShowAlert(false);
     }
-    
+
     return (
 
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -71,7 +74,17 @@ function GarmentScreen({ route, navigation }: Props) {
 
                 <StyledImage source={{ uri: garmentImage }} className='w-4/6 h-1/3 rounded-3xl mt-8 ' />
 
-                <StyledText className='color-gray-500 text-base font-normal mt-4'>Imagen Subida</StyledText>
+                <StyledText className='color-gray-500 text-base font-normal mt-2'>Imagen Subida</StyledText>
+
+                <StyledView className='justify-center items-center'>
+                    <ModalComponent onClose={() => setModalVisible(!modalVisible)}
+                        visible={modalVisible}
+                        message={message}
+                        image_design={garmentImage}
+                       
+                    />
+                </StyledView>
+
 
                 {!isCrochet && showAlert &&
                     <StyledView className='border border-red-500 rounded-lg mt-8 bg-red-200 dark:bg-red-900'>
@@ -83,11 +96,18 @@ function GarmentScreen({ route, navigation }: Props) {
                         <StyledView className='border border-green-500 rounded-lg mt-8 bg-green-200 dark:bg-green-900'>
                             <StyledText className='text-green-900 p-3 dark:text-gray-300'>{message}</StyledText>
                         </StyledView>
-                        <StyledTouchable
-                            className="bg-red-400 dark:bg-sky-700 mt-8 rounded-xl"
-                            onPress={newPhoto}>
-                            <StyledText className='text-white p-3 font-semibold text-base'>Nueva Foto </StyledText>
-                        </StyledTouchable>
+
+                        <StyledView className='flex-row mt-6  items-center justify-center '>
+                            <StyledTouchable onPress={newPhoto} className='items-center'>
+                                <StyledIcon name="camera" size={40}
+                                    className='color-red-300 dark:color-gray-300  p-2 mx-3' />
+                            </StyledTouchable>
+
+                            <StyledTouchable onPress={() => setModalVisible(true)} className='items-center '>
+                                <StyledIcon name="heart" size={40}
+                                    className='color-red-300 dark:color-gray-300  p-2 mx-3' />
+                            </StyledTouchable>
+                        </StyledView>
                     </>
                 }
 

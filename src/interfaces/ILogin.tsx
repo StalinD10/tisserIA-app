@@ -10,6 +10,13 @@ export interface User {
     email: string;
     password: string;
     image: Image;
+    designs_user: [designs_user];
+}
+export interface designs_user {
+    title: string;
+    description: string;
+    image_design: Image;
+    message: string;
 }
 
 export interface Image {

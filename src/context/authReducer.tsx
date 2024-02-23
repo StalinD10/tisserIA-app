@@ -1,10 +1,11 @@
-import { User } from "../interfaces/ILogin";
+import { User, designs_user } from "../interfaces/ILogin";
 
 export interface AuthState {
     status: 'cheking' | 'authenticated' | 'not-authenticated';
     token: string | null;
     errorMessage: string;
     user: User | null;
+    designs_user: designs_user | null;
 }
 
 export type AuthAction =
@@ -13,7 +14,11 @@ export type AuthAction =
     | { type: 'removeError' }
     | { type: 'notAuthenticated' }
     | { type: 'logout' }
-    | { type: 'updateUser', payload: { user: User } };
+    | { type: 'updateUser', payload: { user: User } }
+    | { type: 'getDesigns', payload: { designs_user: designs_user } }
+    | { type: 'addDesigns', payload: { designs_user: designs_user } }
+    | { type: 'updateDesign', payload: {designs_user: designs_user  } }
+    | { type: 'deleteDesign', payload: { designs_user: designs_user  } };
 
 export const authReducer = (state: AuthState, action: AuthAction): AuthState => {
 
@@ -55,6 +60,16 @@ export const authReducer = (state: AuthState, action: AuthAction): AuthState => 
                 ...state,
                 user: action.payload.user
             }
+
+        
+            case 'getDesigns':
+                case 'addDesigns':
+                case 'deleteDesign':
+                case 'updateDesign':
+                    return {
+                        ...state,
+                        designs_user: action.payload.designs_user
+                    }
         default:
             return state;
     }

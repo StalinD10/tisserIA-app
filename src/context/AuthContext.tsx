@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useReducer, useState } from "react";
-import { LoginData, LoginResponse, RegisterData, User } from '../interfaces/ILogin';
+import { LoginData, LoginResponse, RegisterData, User, designs_user } from '../interfaces/ILogin';
 import { AuthState, authReducer } from "./authReducer";
 import loginAPI from "../api/loginAPI";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,10 +9,15 @@ type AuthContextProps = {
     errorMessage: string;
     token: string | null;
     user: User | null;
+    designs_user: designs_user | null;
     status: 'cheking' | 'authenticated' | 'not-authenticated';
     singUp: (registerData: RegisterData) => void;
     singIn: (loginData: LoginData) => void;
     logOut: () => void;
+    getDesigns: (userId: any) => void;
+    addDesigns: (userId: any, data: any) => void;
+    updateDesign: (userId: any, designId: any, data: any) => void;
+    deleteDesign: (userId: any, designId: any) => void;
     updateUser: (userId: any, updatedData: any) => void;
     removeError: () => void;
 }
@@ -22,6 +27,7 @@ const authInitialState: AuthState = {
     status: 'cheking',
     token: null,
     user: null,
+    designs_user: null,
     errorMessage: ''
 }
 
@@ -109,8 +115,8 @@ export const AuthProvider = ({ children }: any) => {
     const updateUser = async (userId: string, updatedData: User) => {
 
         try {
-            const resp = await loginAPI.put(`/updateUser/${userId}`,  updatedData);
-            
+            const resp = await loginAPI.put(`/updateUser/${userId}`, updatedData);
+
             dispatch({
                 type: 'updateUser',
                 payload: {
@@ -139,6 +145,91 @@ export const AuthProvider = ({ children }: any) => {
 
     };
 
+    const getDesigns = async (userId: string) => {
+        try {
+            const resp = await loginAPI.get(`/getDesings/${userId}`, {
+
+            });
+            dispatch({
+                type: 'getDesigns',
+                payload: {
+                    designs_user: resp.data
+                }
+            });
+            return resp.data;
+        } catch (error: any) {
+            console.log(error);
+            dispatch({
+                type: "addError",
+                payload: error.response.data.message || 'No se obtuvieron los diseños'
+            })
+        }
+    }
+
+    const addDesigns = async (userId: string, data: designs_user) => {
+        
+        try {
+            const resp = await loginAPI.post(`/addDesignToUser/${userId}`, data, {
+               
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            console.log(resp.data);
+            dispatch({
+                type: 'addDesigns',
+                payload: {
+                    designs_user: resp.data
+                }
+            });
+        } catch (error: any) {
+            console.log(error);
+            dispatch({
+                type: "addError",
+                payload: error.response.data.message || 'No se guardó el diseño'
+            })
+        }
+    }
+
+    const updateDesign = async (userId: string, designId: string, data: designs_user) => {
+        try {
+            const resp = await loginAPI.put(`/updateDesign/${userId},${designId}`, data);
+
+            dispatch({
+                type: 'updateDesign',
+                payload: {
+                    designs_user: resp.data
+                }
+            });
+        } catch (error: any) {
+            console.log(error);
+            dispatch({
+                type: "addError",
+                payload: error.response.data.message || 'No se actualizó el diseño'
+            })
+        }
+    }
+
+    const deleteDesign = async (userId: string, designId: string) => {
+        try {
+            const resp = await loginAPI.delete(`/deleteDesign/${userId},${designId}`);
+
+            dispatch({
+                type: 'updateDesign',
+                payload: {
+                    designs_user: resp.data
+                }
+            });
+        } catch (error: any) {
+            console.log(error);
+            dispatch({
+                type: "addError",
+                payload: error.response.data.message || 'No se elimino el diseño guardado'
+            })
+        }
+    }
+
     return (
         <AuthContext.Provider value={{
             ...state,
@@ -146,6 +237,10 @@ export const AuthProvider = ({ children }: any) => {
             singIn,
             logOut,
             updateUser,
+            getDesigns,
+            addDesigns,
+            updateDesign,
+            deleteDesign,
             removeError
         }}>
             {children}

@@ -103,9 +103,6 @@ function Login() {
             ) :
                 <>
                     <StyledView className='items-center mb-2 mt-9'>
-                       
-
-
                         <Button
                             title='Ingresar'
                             textSize='text-sm'
