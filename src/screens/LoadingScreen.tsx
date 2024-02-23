@@ -12,7 +12,7 @@ function LoadingScreen({ isLoading = false }: Props) {
 
     const colorScheme = useColorScheme();
     return (
-        <StyledView className='flex-1 dark:bg-black justify-center items-center'>
+        <StyledView className='flex-1 bg-transparent justify-center items-center'>
             {isLoading ? (
                 <ActivityIndicator size={70} color={colorScheme === 'light' ? 'rgb(248 113 113)' : 'rgb(59 130 246)'} />
             ) : null}

@@ -65,14 +65,14 @@ function GarmentScreen({ route, navigation }: Props) {
 
     return (
 
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <ScrollView >
             <StyledView className='flex-1 items-center'>
 
                 <Header screen='PhotoScreen' userImage={true} onPress={newPhoto} />
 
                 <StyledText className='color-red-400 dark:color-gray-200 text-xl font-bold mt-4'>Análisis de patrón</StyledText>
 
-                <StyledImage source={{ uri: garmentImage }} className='w-4/6 h-1/3 rounded-3xl mt-8 ' />
+                <StyledImage source={{ uri: garmentImage }} className='w-4/6 h-72 rounded-3xl mt-8 ' />
 
                 <StyledText className='color-gray-500 text-base font-normal mt-2'>Imagen Subida</StyledText>
 
@@ -93,7 +93,7 @@ function GarmentScreen({ route, navigation }: Props) {
                 }
                 {isCrochet && showAlert &&
                     <>
-                        <StyledView className='border border-green-500 rounded-lg mt-8 bg-green-200 dark:bg-green-900'>
+                        <StyledView className='border border-red-600 dark:border-sky-700 rounded-lg mt-8 bg-red-100 dark:bg-sky-900'>
                             <StyledText className='text-green-900 p-3 dark:text-gray-300'>{message}</StyledText>
                         </StyledView>
 

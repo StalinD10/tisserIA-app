@@ -92,7 +92,6 @@ export const AuthProvider = ({ children }: any) => {
     const singIn = async ({ email, password }: LoginData) => {
         try {
             const resp = await loginAPI.post<LoginResponse>('/login', { email, password }
-
             );
 
             dispatch({
@@ -142,7 +141,6 @@ export const AuthProvider = ({ children }: any) => {
             type: 'removeError',
         }
         )
-
     };
 
     const getDesigns = async (userId: string) => {
@@ -167,22 +165,24 @@ export const AuthProvider = ({ children }: any) => {
     }
 
     const addDesigns = async (userId: string, data: designs_user) => {
-        
+
         try {
             const resp = await loginAPI.post(`/addDesignToUser/${userId}`, data, {
-               
+
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                },
-            });
+                },            }
 
-            console.log(resp.data);
+            );
+
             dispatch({
                 type: 'addDesigns',
                 payload: {
                     designs_user: resp.data
                 }
             });
+
+            return resp;
         } catch (error: any) {
             console.log(error);
             dispatch({

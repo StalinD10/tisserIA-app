@@ -1,10 +1,12 @@
 import { styled } from 'nativewind';
-import React, { useContext } from 'react'
-import { Modal, Text, TextInput, TouchableOpacity, View, useColorScheme } from 'react-native';
+import React, { useContext, useState } from 'react'
+import { Alert, Modal, Text, TextInput, TouchableOpacity, View, useColorScheme } from 'react-native';
 import { useForm } from '../hooks/useForm';
 import { Entypo } from '@expo/vector-icons';
 import loginAPI from '../api/loginAPI';
 import { AuthContext } from '../context/AuthContext';
+import { useNavigation } from '@react-navigation/native';
+import LoadingScreen from '../screens/LoadingScreen';
 
 
 interface Props {
@@ -21,7 +23,9 @@ const StyledTextInput = styled(TextInput);
 
 function ModalComponent({ onClose, visible, image_design, message }: Props) {
 
-    const { user, addDesigns } = useContext(AuthContext);
+    const { user, addDesigns, logOut } = useContext(AuthContext);
+
+    const [isLoading, setIsLoading] = useState(false);
     const colorScheme = useColorScheme();
 
     const { title, description, onChange } = useForm({
@@ -29,34 +33,35 @@ function ModalComponent({ onClose, visible, image_design, message }: Props) {
         description: ''
     });
 
-    const data = {
-        title,
-        description,
-        message,
-        image_design: {
-            "tempFilePath": image_design,
-        }
-
-    }
-const filename= image_design.split('/').pop();
-const formData = new FormData();
-formData.append("title", title);
-formData.append("description", description);
-formData.append("message", message);
-formData.append(
-    'image_design',{
+    const filename = image_design.split('/').pop();
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("message", message);
+    formData.append(
+        'image_design', {
         uri: image_design,
         name: filename,
         type: 'image/jpeg'
 
     }
-)
+    )
     const handleSubmitDesing = async () => {
+        setIsLoading(true);
         try {
+            const resp: any = await addDesigns(user?.id, formData);
+            if (resp.status === 201) {
+                Alert.alert('Diseño guardado!', 'Tendás que iniciar sesión nuevamente', [
+                    { text: 'OK', onPress: logOut },
+                ]);
+            }
+        } catch (error: any) {
+            Alert.alert('Ocurrió un error', error, [
 
-            await addDesigns(user?.id, formData);
-        } catch (error) {
-            console.log(error)
+                { text: 'OK' },
+            ]);
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -100,14 +105,16 @@ formData.append(
 
                     />
                 </StyledView>
-                <StyledView className='flex-row items-center mt-8'>
-                    <StyledTouchable onPress={onClose} className='mx-6'>
-                        <StyledIcon name="cross" size={45} className='color-red-400 dark:color-gray-200' />
-                    </StyledTouchable>
-                    <StyledTouchable onPress={handleSubmitDesing} className='mx-8'>
-                        <StyledIcon name="save" size={45} className='color-red-400 dark:color-gray-200' />
-                    </StyledTouchable>
-                </StyledView>
+                {!isLoading ?
+                    <StyledView className='flex-row items-center mt-8'>
+                        <StyledTouchable onPress={onClose} className='mx-6'>
+                            <StyledIcon name="cross" size={45} className='color-red-400 dark:color-gray-200' />
+                        </StyledTouchable>
+                        <StyledTouchable onPress={handleSubmitDesing} className='mx-8'>
+                            <StyledIcon name="save" size={45} className='color-red-400 dark:color-gray-200' />
+                        </StyledTouchable>
+                    </StyledView>
+                    : <LoadingScreen isLoading={true} />}
             </StyledView>
 
 
